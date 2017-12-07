@@ -1,8 +1,9 @@
-%% Kathryn Tsai
-%% Test 2
+%% Matt O'Connell, Kathryn Tsai
+%% Project Granny Smith
 %% ECE 2409
 
 clear all;clc;close all;
+%% Part I (Questions 1, 2): Train data, write color rules
 %% Read training data
 scale=50;
 fj1=imread('training\fuji.jpg'); fj1_sz=size(fj1);
@@ -13,7 +14,7 @@ gl1=imread('training\gala.jpg'); gl1_sz=size(gl1);
 
 %% Create data
 %right-click and select "Export Data to Workspace", save figur eas
-figure;
+%figure;
 %imshow(fj1,[]); title('Fuji');
 %imshow(gs1,[]); title('Granny Smith');
 %imshow(hc1,[]); title('Honeycrisp');
@@ -49,7 +50,6 @@ r=sort([fj_p1(1),fj_p2(1)]); r=r(1):r(2);
 c=sort([fj_p1(2),fj_p2(2)]); c=c(1):c(2);
 rc=fj1(r,c,:); low=5000;high=30000;
 fj_num = mx_lk(rc,'Fuji',apples,low,high);
-%fj_num = mx_lk(rc,'Fuji',apples,low,high);
 
 %% Gala
 r=sort([gl_p1(1),gl_p2(1)]); r=r(1):r(2);
@@ -69,7 +69,8 @@ c=sort([gs_p1(2),gs_p2(2)]); c=c(1):c(2);
 rc=gl1(r,c,:); low=5000;high=30000;
 fj_num = mx_lk(rc,'Granny Smith',apples,low,high);
 
-%% Read testing data
+%% Part II (Question 3): Randomly shuffle apples and identify type
+%% Part III (Question 4): Test data
 fj2=imread('test\fuji.jpg');
 num_blue = mx_lk(rc,'Fuji',fj2,low,high);
 
@@ -81,16 +82,3 @@ num_blue = mx_lk(rc,'Honeycrisp',hc2,low,high);
 
 gs2=imread('test\organic_mini_granny_smith.jpg');
 num_blue = mx_lk(rc,'Granny Smith',gs2,low,high);
-
-%% Question 2e - Redo
-r=fj1(:,:,1);g=fj1(:,:,2);b=fj1(:,:,3);
-[rows,cols,map]=size(fj1);
-k=(r>g & r>b & g>b & (r+g+b)~=255*3); kk=~k; 
-r(kk)=0; r=reshape(r,[rows,cols]);
-g(kk)=0;g=reshape(g,[rows,cols]);
-b(kk)=0;b=reshape(b,[rows,cols]);
-xx=cat(3,r,g,b);
-figure; hold on;
-subplot 211; imshow(fj1); title ('Original image');
-subplot 212; imshow(xx); title ('Question 1e');
-hold off;
