@@ -64,12 +64,12 @@ fj_num = mx_lk(rc,'Gala',apples,low,high);
 r=sort([hc_p1(1),hc_p2(1)]); r=r(1):r(2);
 c=sort([hc_p1(2),hc_p2(2)]); c=c(1):c(2);
 rc=hc1(r,c,:); low=5000;high=30000;
-fj_num = mx_lk(rc,'Honeycrisp',apples,low,high);
+%fj_num = mx_lk(rc,'Honeycrisp',apples,low,high);
 
 %% Granny Smith
 r=sort([gs_p1(1),gs_p2(1)]); r=r(1):r(2);
 c=sort([gs_p1(2),gs_p2(2)]); c=c(1):c(2);
-rc=gl1(r,c,:); low=5000;high=30000;
+rc=gs1(r,c,:); low=5000;high=30000;
 fj_num = mx_lk(rc,'Granny Smith',apples,low,high);
 
 %% Part II (Question 4): Randomly shuffle apples and identify type
