@@ -3,7 +3,7 @@
 %% ECE 2409
 
 clear all;clc;close all;
-%% Part I (Questions 1, 2): Train data, write color rules
+%% Part I (Questions 1, 2, 3): Train data, write color rules
 %% Read training data
 scale=50;
 fj1=imread('training\fuji.jpg'); fj1_sz=size(fj1);
@@ -25,12 +25,15 @@ gl1=imread('training\gala.jpg'); gl1_sz=size(gl1);
 
 %% Concatenate the 4 training images
 apples=fj1_2; sz=size(apples);
+
 sz(1,end+gs1_sz(2),1) = 0; 
 dim1=fj1_resz(2)+gs1_sz(2)-1;
 apples(1:gs1_sz(1), fj1_resz(2):dim1, :) = gs1; 
+
 sz(1,end+hc1_sz(2),1) = 0;  
 dim2=dim1+hc1_sz(2)-1;
 apples(1:hc1_sz(1), dim1:dim2, :) = hc1;
+
 sz(1,end+gl1_sz(2),1) = 0;  
 dim3=dim2+gl1_sz(2)-1;
 apples(1:gl1_sz(1), dim2:dim3, :) = gl1;
@@ -69,16 +72,32 @@ c=sort([gs_p1(2),gs_p2(2)]); c=c(1):c(2);
 rc=gl1(r,c,:); low=5000;high=30000;
 fj_num = mx_lk(rc,'Granny Smith',apples,low,high);
 
-%% Part II (Question 3): Randomly shuffle apples and identify type
-%% Part III (Question 4): Test data
+%% Part II (Question 4): Randomly shuffle apples and identify type
+game=apple_shuffle(fj1,gs1,hc1,gl1);
+figure;
+imshow(game);
+%create a game board?  
+
+% Maybe move Part I to a different file.  
+%function apple_num = id_apple(id)
+    %make all letters lowercase, cut out whitespace
+    %if id=='fuji'
+        % call training data for fuji apples, then calculate which region
+        % of the shuffled picture matches best using mx_lk (see Part I).
+        
+   %display apple with all white space cut out.
+    %end
+
+%% Part III (Question 5): Test data
 fj2=imread('test\fuji.jpg');
-num_blue = mx_lk(rc,'Fuji',fj2,low,high);
+numfj = mx_lk(rc,'Fuji',fj2,low,high);
 
 gl2=imread('test\gala.jpg');
-num_blue = mx_lk(rc,'Gala',gl2,low,high);
+numgl = mx_lk(rc,'Gala',gl2,low,high);
 
 hc2=imread('test\honeycrisp.jpg');
-num_blue = mx_lk(rc,'Honeycrisp',hc2,low,high);
+numhc = mx_lk(rc,'Honeycrisp',hc2,low,high);
 
 gs2=imread('test\organic_mini_granny_smith.jpg');
-num_blue = mx_lk(rc,'Granny Smith',gs2,low,high);
+numgs = mx_lk(rc,'Granny Smith',gs2,low,high);
+

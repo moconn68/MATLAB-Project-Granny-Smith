@@ -1,6 +1,6 @@
 % mx_lk - maximum likelihood test for an Apple
 
-function num = mx_lk(info,apple,x,low,high) 
+function l = mx_lk(info,apple,x,low,high) 
     r = double(info(:,:,1)); g = double(info(:,:,2)); b = double(info(:,:,3));
     [rows,cols,map]=size(x);
     
