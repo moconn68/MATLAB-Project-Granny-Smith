@@ -54,7 +54,7 @@ c=sort([fj_p1(2),fj_p2(2)]); c=c(1):c(2);
 rc=fj1(r,c,:); low=5000;high=30000;
 fj_loc = mx_lk(rc,'Fuji',apples,low,high);
     % identify index of largest connected component in image x
-    % if multiple connected componenets, cancel the smallest ones!
+    % i!
 
 %% Gala
 r=sort([gl_p1(1),gl_p2(1)]); r=r(1):r(2);

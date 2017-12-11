@@ -33,6 +33,7 @@ function l = mx_lk(info,apple,x,low,high)
     pdf_filt = reshape(bwareafilt(imbinarize(prod_pdf),[low,high]),[rows,cols]);
     [l, num]=bwlabel(pdf_filt);
     
+    
     %figure; hold on;
     %subplot 221; imshow(pdf_rx); title ('Filtered Product of Red PDF');
     %subplot 222; imshow(pdf_gx); title ('Filtered Product of Green PDF');

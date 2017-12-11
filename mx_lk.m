@@ -1,6 +1,6 @@
 % mx_lk - maximum likelihood test for an Apple
 
-function l = mx_lk(info,apple,x,low,high) 
+function mx = mx_lk(info,apple,x,low,high) 
     r = double(info(:,:,1)); g = double(info(:,:,2)); b = double(info(:,:,3));
     [rows,cols,map]=size(x);
     
@@ -30,7 +30,7 @@ function l = mx_lk(info,apple,x,low,high)
         
     % count apples in picture
     pdf_filt = reshape(bwareafilt(imbinarize(prod_pdf),[low,high]),[rows,cols]);
-    [l, num]=bwlabel(pdf_filt);
+    [BW, num]=bwlabel(pdf_filt);
     
     %figure; hold on;
     %subplot 221; imshow(pdf_rx); title ('Filtered Product of Red PDF');
@@ -38,7 +38,16 @@ function l = mx_lk(info,apple,x,low,high)
     %subplot 223; imshow(pdf_bx); title ('Filtered Product of Blue PDF');
     %subplot 224; imshow(x); title ('Original image of apples');  hold off;
     
+    % identify index of largest connected component in image x
+    % this should be conditional!
+    CC=bwconncomp(BW);
+    numPixels = cellfun(@numel,CC.PixelIdxList);
+    [mx,idx_mx] = max(numPixels); [mn,idx_mn] = min(numPixels);
+    BW(CC.PixelIdxList{idx_mn}) = 0;
+    
     figure; hold on;
-    subplot 212; imshow(pdf_filt); title (['Filtered image for ' graph_title]);
-    subplot 211; imshow(x); title ('Original image');  hold off;
+    subplot 222; imshow(pdf_filt); title (['Filtered image for ' graph_title 'data']);
+    subplot 221; imshow(x); title ('Original image');  
+    subplot 223; imshow(BW); title([graph_title ' selected']); hold off;
+    
 end
