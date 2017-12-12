@@ -1,5 +1,5 @@
 % mx_lk - maximum likelihood test for an Apple
-
+% Written by Katie Tsai and Matthew O'Connell
 function mx = mx_lk(info,apple,x,low,high) 
     r = double(info(:,:,1)); g = double(info(:,:,2)); b = double(info(:,:,3));
     [rows,cols,map]=size(x);
@@ -42,12 +42,23 @@ function mx = mx_lk(info,apple,x,low,high)
     % this should be conditional!
     CC=bwconncomp(BW);
     numPixels = cellfun(@numel,CC.PixelIdxList);
-    [mx,idx_mx] = max(numPixels); [mn,idx_mn] = min(numPixels);
-    BW(CC.PixelIdxList{idx_mn}) = 0;
+    [mx,idx_mx] = max(numPixels);
+    while (CC.NumObjects > 1)
+        [mn,idx_mn] = min(numPixels);
+        BW(CC.PixelIdxList{idx_mn}) = 0;
+        CC=bwconncomp(BW);
+        numPixels = cellfun(@numel,CC.PixelIdxList);
+        [mx,idx_mx] = max(numPixels);
+    end
+    BW2 = imfill(BW, 'holes');
+    newX = x.*uint8(BW2);
+    blk = find(newX == 0); newX(blk) = 255;
     
     figure; hold on;
     subplot 222; imshow(pdf_filt); title (['Filtered image for ' graph_title 'data']);
     subplot 221; imshow(x); title ('Original image');  
-    subplot 223; imshow(BW); title([graph_title ' selected']); hold off;
+    %subplot 223; imshow(BW); title([graph_title ' selected']);
+    subplot 223; imshow(BW2); title(['Filled']);
+    subplot 224; imshow(newX); title(['Selected apple']); hold off;
     
 end
