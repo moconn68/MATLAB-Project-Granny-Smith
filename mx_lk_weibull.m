@@ -65,17 +65,18 @@ function mx = mx_lk_weibull(info,apple,x,low,high,removemin)
     
     % Apply filtered image with filled connected objects to original image.
     BW2 = imfill(BW, 'holes');
-    %newX = x.*uint8(BW2);
-    %blk = newX == 0; newX(blk) = 255;
-    BW3=~BW2; 
-    r(BW3)=255; r=reshape(r,[rows,cols]);
-    g(BW3)=255; g=reshape(g,[rows,cols]);
-    b(BW3)=255; b=reshape(b,[rows,cols]);
-    BW4=cat(3,r,g,b);
+    BW3 = x.*uint8(BW2);
+    blk = BW3 == 0; BW3(blk) = 255;
+    
+    %BW3=~BW2; 
+    %r(BW3)=255; r=reshape(r,[rows,cols]);
+    %g(BW3)=255; g=reshape(g,[rows,cols]);
+    %b(BW3)=255; b=reshape(b,[rows,cols]);
+    %BW4=cat(3,r,g,b);
 
     figure; hold on;
     subplot 221; imshow(x); title ('1.  Original image');  
     subplot 222; imshow(pdf_filt); title (['2.  Filtered image for ' graph_title ' data']);
     subplot 223; imshow(BW2); title(['3.  Filling in the filtered image']);
-    subplot 224; imshow(BW4); title('4.  Applying filter to original image'); hold off;
+    subplot 224; imshow(BW3); title('4.  Applying filter to original image'); hold off;
 end
