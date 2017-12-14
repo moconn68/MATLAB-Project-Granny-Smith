@@ -131,3 +131,5 @@ close all
 
 % Pros: Robust implementation.
 % Cons: Need better test images.  Mixed results when applied to real data.
+% Improve concatenation of apples by making extra space white instead
+% of black, as well as only resizing images when above certain height. Better documentation. 
