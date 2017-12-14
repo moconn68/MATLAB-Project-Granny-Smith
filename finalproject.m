@@ -2,8 +2,10 @@
 %% Project Granny Smith
 %% ECE 2409
 
+%% Begin program.
 clear all;clc;close all;
-%% Part I (Questions 1, 2, 3): Train data, write color rules 
+
+%% PART 1 (QUESTIONS 1, 2, 3): TRAIN DATA, CREATE HISTOGRAMS, WRITE COLOR RULES. 
 %% Read training data
 scale=50;
 fj1=imread('training\fuji.jpg'); fj1_sz=size(fj1);
@@ -39,43 +41,39 @@ dim3=dim2+gl1_sz(2)-1;
 apples(1:gl1_sz(1), dim2:dim3, :) = gl1;
 %imshow(apples);
 
-%% Import previously determined dimensions of colors to be trained
-h1=openfig('cursor_fig2.fig'); % fix sizing
-%load('cursor_info2.mat');
-%[fj_p1,fj_p2, gs_p1,gs_p2, hc_p1,hc_p2, gl_p1,gl_p2]=cursor_info2.Position;
-
+%% Import previously determined dimensions of colors to be trained, then apply rules to them.
+% Show selected training data.
+h1=openfig('cursor_fig2.fig'); 
 load('cursor_info.mat');
 [gl_p1,gl_p2,hc_p1,hc_p2,gs_p1,gs_p2,fj_p1,fj_p2]=cursor_info.Position;
-%[ gs_p1,gs_p2, hc_p1,hc_p2, gl_p1,gl_p2, fj_p1,fj_p2]=cursor_info2.Position;
 
-%% Fuji - Katie
+% Fuji - Katie
 r=sort([fj_p1(1),fj_p2(1)]); r=r(1):r(2);
 c=sort([fj_p1(2),fj_p2(2)]); c=c(1):c(2);
 rc=fj1(r,c,:); low=5000;high=30000;
-fj_loc = mx_lk(rc,'Fuji',apples,low,high);
-    % identify index of largest connected component in image x
-    % if multiple connected componenets, cancel the smallest ones!
+fj_loc = mx_lk_weibull(rc,'Fuji',apples,low,high);
 
-%% Gala - Matt
+% Gala - Matt
 r=sort([gl_p1(1),gl_p2(1)]); r=r(1):r(2);
 c=sort([gl_p1(2),gl_p2(2)]); c=c(1):c(2);
 rc=gl1(r(:),c(:),:); low=5000;high=30000;
-gl_loc = mx_lk(rc,'Gala',apples,low,high);
+gl_loc = mx_lk_weibull(rc,'Gala',apples,low,high);
 
-%% Honeycrisp - Katie
+% Honeycrisp - Katie
 r=sort([hc_p1(1),hc_p2(1)]); r=r(1):r(2);
 c=sort([hc_p1(2),hc_p2(2)]); c=c(1):c(2);
 rc=hc1(r,c,:); low=10000;high=10^10;
-hc_num = mx_lk_weibull(rc,'Honeycrisp',apples,low,high);
-% possibly incorporate weibull as a try catch in mx_lx?
+hc_loc = mx_lk_weibull(rc,'Honeycrisp',apples,low,high);
 
-%% Granny Smith - Matt
+% Granny Smith - Matt
 r=sort([gs_p1(1),gs_p2(1)]); r=r(1):r(2);
 c=sort([gs_p1(2),gs_p2(2)]); c=c(1):c(2);
 rc=gs1(r,c,:); low=5000;high=30000;
-fj_num = mx_lk(rc,'Granny Smith',apples,low,high);
+gs_num = mx_lk_weibull(rc,'Granny Smith',apples,low,high);
 
-%% Part II (Question 4): Randomly shuffle apples and identify type - Katie wrote shuffle function & Matt did shuffling
+%% PART II (QUESTION 4): RANDOMLY SHUFFLE APPLES AND IDENTIFY TYPE OF APPLE IN LINEUP.
+% Katie wrote shuffle function & Matt did shuffling. 
+
 mattShuffled=apple_shuffle(fj1,gs1,hc1,gl1);
 mTitle = "Matt's Shuffled Image";
 figure;
@@ -85,53 +83,51 @@ katieShuffled=apple_shuffle(fj1,gs1,hc1,gl1);
 kTitle = "Katie's Shuffled Image"; 
 figure;
 imshow(katieShuffled);
-title(kTitle); %maybe 2nd shuffled image should come after 1st shuffled sorting
-%create a game board? - we do not need a game board
-% add four lines here to identify each apple
-
-% Maybe move Part I to a different file.  
-%function apple_num = id_apple(id)
-    %make all letters lowercase, cut out whitespace
-    %if id=='fuji'
-        % call training data for fuji apples, then calculate which region
-        % of the shuffled picture matches best using mx_lk (see Part I).
-        
-   %display apple with all white space cut out.
-    %end
+title(kTitle); 
     
-%% Matt - Applying rule for Gala on shuffled image
+% Gala - Matt
 r=sort([gl_p1(1),gl_p2(1)]); r=r(1):r(2);
 c=sort([gl_p1(2),gl_p2(2)]); c=c(1):c(2);
 rc=gl1(r(:),c(:),:); low=5000;high=30000;
-gl_loc = mx_lk(rc,'Gala',mattShuffled,low,high);
+gl_loc = mx_lk_weibull(rc,'Gala',mattShuffled,low,high);
 
-%% Matt - Applying rule for Granny Smith on shuffled image
+% Granny Smith - Matt
 r=sort([gs_p1(1),gs_p2(1)]); r=r(1):r(2);
 c=sort([gs_p1(2),gs_p2(2)]); c=c(1):c(2);
 rc=gs1(r,c,:); low=5000;high=30000;
-fj_num = mx_lk(rc,'Granny Smith',mattShuffled,low,high);
+fj_num = mx_lk_weibull(rc,'Granny Smith',mattShuffled,low,high);
 
-%% Katie- Applying rule for Fuji on shuffled image
+% Fuji - Katie 
 r=sort([fj_p1(1),fj_p2(1)]); r=r(1):r(2);
 c=sort([fj_p1(2),fj_p2(2)]); c=c(1):c(2);
 rc=fj1(r,c,:); low=5000;high=30000;
-fj_loc = mx_lk(rc,'Fuji',katieShuffled,low,high);
+fj_loc = mx_lk_weibull(rc,'Fuji',katieShuffled,low,high);
 
-%% Katie- Applying rule for Honeycrisp on shuffled image
+% Honeycrisp - Katie
 r=sort([hc_p1(1),hc_p2(1)]); r=r(1):r(2);
 c=sort([hc_p1(2),hc_p2(2)]); c=c(1):c(2);
 rc=hc1(r,c,:); low=10000;high=10^10;
 hc_num = mx_lk_weibull(rc,'Honeycrisp',apples,low,high);
-%% Part III (Question 5): Test data with real apples - members did same apples as their roles in question 4
+%% PART III (QUESTION 5): TEST DATA WITH REAL APPLES.
+
+% Fuji - Katie
 fj2=imread('test\fuji.jpg');
-numfj = mx_lk_weibull(rc,'Fuji',fj2,low,high);
+numfj = mx_lk_weibull(rc,'Fuji',fj2,low,high,false);
 
+% Gala - Matt
 gl2=imread('test\gala.jpg');
-numgl = mx_lk_weibull(rc,'Gala',gl2,low,high);
+numgl = mx_lk_weibull(rc,'Gala',gl2,low,high,false);
 
+% Honeycrisp - Katie
 hc2=imread('test\honeycrisp.jpg');
-numhc = mx_lk_weibull(rc,'Honeycrisp',hc2,low,high);
+numhc = mx_lk_weibull(rc,'Honeycrisp',hc2,low,high,false);
 
+% Granny Smith - Matt
 gs2=imread('test\organic_mini_granny_smith.jpg');
-numgs = mx_lk_weibull(rc,'Granny Smith',gs2,low,high);
+numgs = mx_lk_weibull(rc,'Granny Smith',gs2,low,high,false);
 
+%% End program.
+close all
+
+% Pros: Robust implementation.
+% Cons: Need better test images.  Mixed results when applied to real data.
